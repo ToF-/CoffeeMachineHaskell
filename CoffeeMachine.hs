@@ -2,6 +2,9 @@
 module CoffeeMachine
 where
 
-data Order = Coffee
+data Order = Coffee | Tea
+
 command :: Order -> String
-command _ = "C::"
+command Coffee = "C::"
+command Tea    = "T::"
+
