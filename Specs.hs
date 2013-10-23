@@ -10,3 +10,6 @@ main = hspec $ do
 
         it "should send instruction for tea" $ do
             command Tea `shouldBe` "T::"
+
+        it "should send instruction for chocolate" $ do
+            command Chocolate `shouldBe` "H::"
