@@ -5,6 +5,9 @@ where
 data Order = Coffee | Tea
 
 command :: Order -> String
-command Coffee = "C::"
-command Tea    = "T::"
+command order = beverage order : "::"
+
+beverage :: Order -> Char
+beverage Coffee = 'C'
+beverage Tea    = 'T'
 
