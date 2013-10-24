@@ -17,3 +17,6 @@ main = hspec $ do
         it "should send instruction for 1 or 2 sugar" $ do
             command (Order Tea 1)  `shouldBe` "T:1:0"
             command (Order Coffee 2) `shouldBe` "C:2:0"
+
+        it "should send a message" $ do
+            command (Message "hello world!") `shouldBe` "M:hello world!"

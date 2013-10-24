@@ -3,10 +3,12 @@ module CoffeeMachine
 where
 
 data Order = Order Beverage Integer
+            | Message String
 data Beverage = Coffee | Tea | Chocolate
 
 command :: Order -> String
 command (Order beverage sugar) = (beverageCode beverage) : sugarCode sugar
+command (Message message) = 'M':':':message
 
 beverageCode :: Beverage -> Char
 beverageCode Coffee = 'C'
