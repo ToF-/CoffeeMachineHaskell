@@ -2,13 +2,18 @@
 module CoffeeMachine
 where
 
-data Order = Coffee | Tea | Chocolate
+data Order = Order Beverage Integer
+data Beverage = Coffee | Tea | Chocolate
 
 command :: Order -> String
-command order = beverage order : "::"
+command (Order beverage sugar) = (beverageCode beverage) : sugarCode sugar
 
-beverage :: Order -> Char
-beverage Coffee = 'C'
-beverage Tea    = 'T'
-beverage Chocolate = 'H'
+beverageCode :: Beverage -> Char
+beverageCode Coffee = 'C'
+beverageCode Tea    = 'T'
+beverageCode Chocolate = 'H'
+
+sugarCode :: Integer -> String
+sugarCode 0 = "::"
+sugarCode 1 = ":1:0"
 
