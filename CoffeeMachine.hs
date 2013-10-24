@@ -16,4 +16,5 @@ beverageCode Chocolate = 'H'
 sugarCode :: Integer -> String
 sugarCode 0 = "::"
 sugarCode 1 = ":1:0"
+sugarCode 2 = ":2:0"
 
