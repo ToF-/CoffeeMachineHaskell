@@ -2,13 +2,21 @@
 module CoffeeMachine
 where
 
+type CoffeeMachine = String
+
 data Order = Order Beverage Integer
             | Message String
 data Beverage = Coffee | Tea | Chocolate
 
-command :: Order -> String
-command (Order beverage sugar) = (beverageCode beverage) : sugarCode sugar
-command (Message message) = 'M':':':message
+command :: CoffeeMachine -> String
+command = id
+
+order :: Beverage -> Integer -> CoffeeMachine
+order beverage sugar = (beverageCode beverage) : sugarCode sugar
+
+message :: String -> CoffeeMachine
+message m = 'M':':':m
+
 
 beverageCode :: Beverage -> Char
 beverageCode Coffee = 'C'
