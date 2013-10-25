@@ -24,5 +24,5 @@ main = hspec $ do
 
         it "should signal missing amount of money for beverage" $ do
             command (order Tea 0 newMachine) `shouldBe` "M:missing 0.4 euros"
-            command (order Coffee 0 newMachine) `shouldBe` "M:missing 0.5 euros"
-            command (order Chocolate 0 newMachine) `shouldBe` "M:missing 0.6 euros"
+            command (order Coffee 0 newMachine) `shouldBe` "M:missing 0.6 euros"
+            command (order Chocolate 0 newMachine) `shouldBe` "M:missing 0.5 euros"
