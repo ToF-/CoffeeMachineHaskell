@@ -15,14 +15,17 @@ command :: CoffeeMachine -> String
 command = snd
 
 order :: Beverage -> Integer -> CoffeeMachine -> CoffeeMachine 
-order beverage sugar (money,c) = (money,(beverageCode beverage) : sugarCode sugar)
+order Tea sugar m@(0,c)  = message "missing 0.4 euros" m
+order Coffee sugar m@(0,c)  = message "missing 0.5 euros" m
+order Chocolate sugar m@(0,c)  = message "missing 0.6 euros" m
+order beverage sugar (amount,c) = (amount,(beverageCode beverage) : sugarCode sugar)
 
 
 message :: String -> CoffeeMachine -> CoffeeMachine 
-message msg (money,_) = (money, 'M':':':msg)
+message msg (amount,_) = (amount, 'M':':':msg)
 
 insert :: Money -> CoffeeMachine -> CoffeeMachine
-insert money (_,cmd) = (money, cmd)
+insert amount (_,cmd) = (amount, cmd)
 
 beverageCode :: Beverage -> Char
 beverageCode Coffee = 'C'
