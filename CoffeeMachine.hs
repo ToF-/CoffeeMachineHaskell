@@ -2,21 +2,27 @@
 module CoffeeMachine
 where
 
-type CoffeeMachine = String
+type CoffeeMachine = (Money, Command)
+type Money   = Double
+type Command = String 
 
-data Order = Order Beverage Integer
-            | Message String
 data Beverage = Coffee | Tea | Chocolate
 
+newMachine :: CoffeeMachine
+newMachine = (0.0, "")
+
 command :: CoffeeMachine -> String
-command = id
+command = snd
 
-order :: Beverage -> Integer -> CoffeeMachine
-order beverage sugar = (beverageCode beverage) : sugarCode sugar
+order :: Beverage -> Integer -> CoffeeMachine -> CoffeeMachine 
+order beverage sugar (money,c) = (money,(beverageCode beverage) : sugarCode sugar)
 
-message :: String -> CoffeeMachine
-message m = 'M':':':m
 
+message :: String -> CoffeeMachine -> CoffeeMachine 
+message msg (money,_) = (money, 'M':':':msg)
+
+insert :: Money -> CoffeeMachine -> CoffeeMachine
+insert money (_,cmd) = (money, cmd)
 
 beverageCode :: Beverage -> Char
 beverageCode Coffee = 'C'
