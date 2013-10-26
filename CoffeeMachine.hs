@@ -3,25 +3,32 @@ module CoffeeMachine
 where
 
 type CoffeeMachine = (Money, Command)
-type Money   = Double
+type Money   = Integer
 type Command = String 
 
 data Beverage = Coffee | Tea | Chocolate
 
 newMachine :: CoffeeMachine
-newMachine = (0.0, "")
+newMachine = (0, "")
 
 command :: CoffeeMachine -> String
 command = snd
 
 order :: Beverage -> Integer -> CoffeeMachine -> CoffeeMachine 
-order beverage sugar m@(0,c)  = message ("missing " ++ (show (price beverage)) ++ " euros") m
+order beverage sugar m@(amount,c) | amount < (price beverage)  = message ("missing " ++ (showMoney (price beverage - amount)) ++ " euros") m
 order beverage sugar (amount,c) = (amount,(beverageCode beverage) : sugarCode sugar)
 
 price :: Beverage -> Money
-price Tea = 0.4
-price Coffee = 0.6
-price Chocolate = 0.5
+price Tea = 40
+price Coffee = 60
+price Chocolate = 50
+
+showMoney :: Money -> String
+showMoney amount = euros (amount `div` 100) ++ "." ++ cents (amount `mod` 100)
+    where euros = show
+          cents n | n < 10 = '0' : show n
+          cents n          = show n
+
 
 message :: String -> CoffeeMachine -> CoffeeMachine 
 message msg (amount,_) = (amount, 'M':':':msg)
