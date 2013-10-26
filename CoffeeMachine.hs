@@ -15,8 +15,8 @@ command :: CoffeeMachine -> String
 command = snd
 
 order :: Beverage -> Integer -> CoffeeMachine -> CoffeeMachine 
-order beverage sugar m@(amount,c) | amount < (price beverage)  = message ("missing " ++ (showMoney (price beverage - amount)) ++ " euros") m
-order beverage sugar (amount,c) = (amount,(beverageCode beverage) : sugarCode sugar)
+order b _ m@(n,_) | n < (price b) = message ("missing " ++ (showMoney (price b - n)) ++ " euros") m
+order b s (n,c) = (n,(beverageCode b) : sugarCode s)
 
 price :: Beverage -> Money
 price Tea = 40
