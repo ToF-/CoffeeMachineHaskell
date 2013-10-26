@@ -2,26 +2,30 @@
 module CoffeeMachine
 where
 
-type CoffeeMachine = (Money, Command)
+type CoffeeMachine = (Money, Instructions)
 type Money   = Integer
-type Command = String 
+type Instructions = String 
 
-data Beverage = Coffee | Tea | Chocolate
+data Order = Coffee Integer
+           | Tea Integer
+           | Chocolate Integer
+           | OrangeJuice
 
 newMachine :: CoffeeMachine
 newMachine = (0, "")
 
-command :: CoffeeMachine -> String
-command = snd
+instructions :: CoffeeMachine -> String
+instructions = snd
 
-order :: Beverage -> Integer -> CoffeeMachine -> CoffeeMachine 
-order b _ m@(n,_) | n < (price b) = message ("missing " ++ (showMoney (price b - n)) ++ " euros") m
-order b s (n,c) = (n,(beverageCode b) : sugarCode s)
+order :: Order -> CoffeeMachine -> CoffeeMachine 
+order o m@(n,_) | n < (price o) = message ("missing " ++ (showMoney (price o - n)) ++ " euros") m
+order o (n,c) = (n,beverage o)
 
-price :: Beverage -> Money
-price Tea = 40
-price Coffee = 60
-price Chocolate = 50
+price :: Order -> Money
+price (Tea _)= 40
+price (Coffee _) = 60
+price (Chocolate _) = 50
+price OrangeJuice  = 60
 
 showMoney :: Money -> String
 showMoney amount = euros (amount `div` 100) ++ "." ++ cents (amount `mod` 100)
@@ -36,10 +40,11 @@ message msg (amount,_) = (amount, 'M':':':msg)
 insert :: Money -> CoffeeMachine -> CoffeeMachine
 insert amount (_,cmd) = (amount, cmd)
 
-beverageCode :: Beverage -> Char
-beverageCode Coffee = 'C'
-beverageCode Tea    = 'T'
-beverageCode Chocolate = 'H'
+beverage :: Order -> String
+beverage (Coffee    s) = 'C' : sugarCode s
+beverage (Tea       s) = 'T' : sugarCode s
+beverage (Chocolate s) = 'H' : sugarCode s
+beverage OrangeJuice   = 'O' : sugarCode 0
 
 sugarCode :: Integer -> String
 sugarCode 0 = "::"
