@@ -1,44 +1,42 @@
 -- CoffeeMachine.hs
 module CoffeeMachine
 where
+import Text.Printf
 
-type CoffeeMachine = (Money, Instructions)
+data CoffeeMachine = CoffeeMachine { money :: Money,
+                                     instructions :: Instructions }
 type Money   = Integer
 type Instructions = String 
 
-data Order = Coffee Integer
-           | Tea Integer
+data Order = Coffee    Integer
+           | Tea       Integer
            | Chocolate Integer
            | OrangeJuice
 
 newMachine :: CoffeeMachine
-newMachine = (0, "")
-
-instructions :: CoffeeMachine -> String
-instructions = snd
-
-order :: Order -> CoffeeMachine -> CoffeeMachine 
-order o m@(n,_) | n < (price o) = message ("missing " ++ (showMoney (price o - n)) ++ " euros") m
-order o (n,c) = (n,beverage o)
-
-price :: Order -> Money
-price (Tea _)= 40
-price (Coffee _) = 60
-price (Chocolate _) = 50
-price OrangeJuice  = 60
-
-showMoney :: Money -> String
-showMoney amount = euros (amount `div` 100) ++ "." ++ cents (amount `mod` 100)
-    where euros = show
-          cents n | n < 10 = '0' : show n
-          cents n          = show n
-
+newMachine = CoffeeMachine 0 ""
 
 message :: String -> CoffeeMachine -> CoffeeMachine 
-message msg (amount,_) = (amount, 'M':':':msg)
+message msg m = m { instructions = 'M':':':msg }
 
 insert :: Money -> CoffeeMachine -> CoffeeMachine
-insert amount (_,cmd) = (amount, cmd)
+insert n cm = cm { money = n }
+
+order :: Order -> CoffeeMachine -> CoffeeMachine 
+order o m 
+    | money m < price o = message (moneyMissing o m) m
+    | otherwise         = m { instructions = beverage o }
+
+moneyMissing :: Order -> CoffeeMachine -> String
+moneyMissing o cm = "missing " ++ (showMoney missing) ++ " euros"
+    where missing = price o - money cm
+          showMoney n = printf "%d.%02d" (n `div` 100) (n `mod` 100)
+
+price :: Order -> Money
+price (Tea _)       = 40
+price (Coffee _)    = 60
+price (Chocolate _) = 50
+price OrangeJuice   = 60
 
 beverage :: Order -> String
 beverage (Coffee    s) = 'C' : sugarCode s
